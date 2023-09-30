@@ -12,6 +12,7 @@
   <link rel="stylesheet" type="text/css" href="<?php echo esc_url( get_template_directory_uri() ); ?>/assets/css/styles.css" />
   <script type="text/javascript" src="./assets/js/jquery-3.3.1.min.js"></script>
   <script type="text/javascript" src="./assets/js/bundle.js"></script>
+  <?php wp_head(); ?>
 </head>
 <body>
   <div class="container">
