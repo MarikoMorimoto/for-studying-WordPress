@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <meta name="keywords" content="共通キーワード" />
   <meta name="description" content="共通ディスクリプション" />
-  <title>PACIFIC MALL DEVELOPMENT</title>
+  <title><?php echo esc_html( wp_get_document_title() ); ?></title>
   <link rel="shortcut icon" href="<?php echo esc_url( get_template_directory_uri() ); ?>/assets/images/common/favicon.ico" />
   <link href="https://fonts.googleapis.com/earlyaccess/notosansjapanese.css" rel="stylesheet" />
   <link href="https://fonts.googleapis.com/css?family=Vollkorn:400i" rel="stylesheet" />
