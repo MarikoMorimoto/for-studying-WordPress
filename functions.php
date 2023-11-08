@@ -6,3 +6,23 @@ function my_enqueue_scripts() {
 	wp_enqueue_style( 'my_styles' , $uri . '/assets/css/styles.css' , [] );
 }
 add_action( 'wp_enqueue_scripts', 'my_enqueue_scripts' );
+
+// ヘッダー・フッターのカスタムメニュー化
+register_nav_menus( array(
+	'place_global' => 'グローバル',
+	'place_footer' => 'フッターナビ'
+) );
+
+// メイン画像上にテンプレートごとの文字列を表示
+function get_main_title() {
+	if ( is_singular( 'post') ) { // 個別の投稿か
+		$category_obj = get_the_category();
+		return $category_obj[0]->name;
+	} elseif ( is_page() ) {
+		return get_the_title();
+	} elseif( is_category() ) { // カテゴリーページか
+		return single_cat_title(); // 現在のカテゴリー名を出力
+	}
+
+	return '';
+}

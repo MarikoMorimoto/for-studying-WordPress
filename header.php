@@ -26,26 +26,12 @@
         </button>
         <div class="header-nav">
           <nav class="global-nav">
-            <ul class="menu">
-              <li class="menu-item">
-                <a class="nav-link active" href="#">ホーム</a>
-              </li>
-              <li class="menu-item">
-                <a class="nav-link" href="#">企業情報</a>
-              </li>
-              <li class="menu-item">
-                <a class="nav-link" href="#">店舗情報</a>
-              </li>
-              <li class="menu-item">
-                <a class="nav-link" href="#">地域貢献活動</a>
-              </li>
-              <li class="menu-item">
-                <a class="nav-link" href="#">ニュースリリース</a>
-              </li>
-              <li class="menu-item">
-                <a class="nav-link" href="#">お問い合わせ</a>
-              </li>
-            </ul>
+            <?php
+            wp_nav_menu( array(
+                'theme_location' => 'place_global',
+                'container' => 'false', // 出力される<ul>タグを<div>で囲まない
+            ) );
+            ?>
           </nav>
           <form class="search-form" role="search" method="get" action="">
             <div class="search-box">
@@ -81,7 +67,7 @@
                 <img src="<?php echo get_template_directory_uri(); ?>/assets/images/bg-page-dummy.png">
                 <div class="wrapper">
                   <span class="page-title-en"></span>
-                  <h2 class="page-title"><?php echo get_the_title(); ?></h2>
+                  <h2 class="page-title"><?php echo get_main_title(); ?></h2>
                 </div>
               </div>
               <div class="page-container">
