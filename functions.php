@@ -18,8 +18,10 @@ function get_main_title() {
 	if ( is_singular( 'post') ) { // 個別の投稿か
 		$category_obj = get_the_category();
 		return $category_obj[0]->name;
-	} elseif( is_page() ) {
+	} elseif ( is_page() ) {
 		return get_the_title();
+	} elseif( is_category() ) { // カテゴリーページか
+		return single_cat_title(); // 現在のカテゴリー名を出力
 	}
 
 	return '';
