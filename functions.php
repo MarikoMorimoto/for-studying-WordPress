@@ -46,3 +46,40 @@ function get_child_pages( $number = -1 ) {
 	$child_pages = new WP_Query( $args );
 	return $child_pages;
 }
+
+/**
+ * アイキャッチ画像を利用できるようにする
+ * 管理画面にアイキャッチ画像を設定するためのUIが追加される
+ */
+add_theme_support( 'post-thumbnails' );
+
+/**
+ * トップページのメイン画像用のサイズ設定
+ * add_image_size() を定義（記述）したあとに画像をアップロードすると、そのサイズの画像が生成される。
+ */
+add_image_size( 'top', 1077, 622, true );
+
+/**
+ * 地域貢献活動一覧画像用のサイズ設定
+ */
+add_image_size( 'contribution', 557, 280, true );
+
+/**
+ * トップページの地域貢献活動にて使用している画像用のサイズ設定
+ */
+add_image_size( 'front-contribution', 255, 189, true );
+
+/**
+ * 企業情報・店舗情報一覧画像用のサイズ設定
+ */
+add_image_size( 'common', 465, 252, true );
+
+/**
+ * 各ページのメイン画像用のサイズ設定
+ */
+add_image_size( 'detail', 1100, 330, true );
+
+/**
+ * 検索一覧画像用のサイズ設定
+ */
+add_image_size( 'search', 168, 168, true );

@@ -1,7 +1,7 @@
 <article class="article-card">
 	<a class="card-link" href="<?php the_permalink(); ?>">
 		<div class="image">
-			<?php the_post_thumbnail(); ?>
+			<?php the_post_thumbnail( 'contribution' ); ?>
 		</div>
 		<div class="body">
 			<time><?php the_time( 'Y.m.d' ); ?></time>
