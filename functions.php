@@ -83,3 +83,18 @@ add_image_size( 'detail', 1100, 330, true );
  * 検索一覧画像用のサイズ設定
  */
 add_image_size( 'search', 168, 168, true );
+
+/**
+ * 各テンプレートごとのメイン画像を表示
+ *
+ * @return string メイン画像を表示するimgタグ
+ */
+function get_main_image() {
+	if ( is_page() ) {
+		return get_the_post_thumbnail( get_queried_object()->ID, 'detail' );
+	} elseif ( is_category( 'news' ) || is_singular( 'post' ) ) {
+		return '<img src="' . get_template_directory_uri() . '/assets/images/bg-page-news.jpg" />';
+	} else {
+		return '<img src="' . get_template_directory_uri() . '/assets/images/bg-page-dummy.jpg" />';
+	}
+}
