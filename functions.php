@@ -26,3 +26,23 @@ function get_main_title() {
 
 	return '';
 }
+
+/**
+ * 子ページを取得する関数
+ *
+ * @param int $number 指定なしのときは -1 全件取得
+ *
+ * @return WP_Query
+ */
+function get_child_pages( $number = -1 ) {
+	$parent_id = get_the_ID();
+	$args = array(
+		'posts_per_page'    => $number,
+		'post_type'         => 'page',
+		'orderby'           => 'menu_order', // 何を元にして並び替えするか ここでは管理画面で設定した並び
+		'order'             => 'ASC',
+		'post_parent'       => $parent_id,
+	);
+	$child_pages = new WP_Query( $args );
+	return $child_pages;
+}
