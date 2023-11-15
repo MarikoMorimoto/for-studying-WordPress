@@ -95,12 +95,7 @@
 			<p class="section-lead"><?php echo $term_obj->description; ?></p>
 			<ul class="news">
 				<?php
-				$args = array(
-					'post_type'         => 'post',
-					'category_name'     => 'news',
-					'posts_per_page'    => 3,
-				);
-				$news_posts = new WP_Query( $args ); // new WP_Query したら、wp_reset_postdata()するのを忘れない！
+				$news_posts = get_specific_post( 'post', 'category', 'news', 3 );
 				if ( $news_posts->have_posts() ) :
 					while( $news_posts->have_posts() ) : $news_posts->the_post();
 				?>
