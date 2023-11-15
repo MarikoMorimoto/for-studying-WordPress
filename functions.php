@@ -26,3 +26,107 @@ function get_main_title() {
 
 	return '';
 }
+
+/**
+ * 子ページを取得する関数
+ *
+ * @param int $number 指定なしのときは -1 全件取得
+ * @param int|null $specified_id 指定なしのときはnull
+ *
+ * @return WP_Query
+ */
+function get_child_pages( int $number = -1, int $specified_id = null ): WP_Query {
+	if ( isset( $specified_id ) ) :
+		$parent_id = $specified_id;
+	else :
+		$parent_id = get_the_ID();
+	endif;
+
+	$args = array(
+		'posts_per_page'    => $number,
+		'post_type'         => 'page',
+		'orderby'           => 'menu_order', // 何を元にして並び替えするか ここでは管理画面で設定した並び
+		'order'             => 'ASC',
+		'post_parent'       => $parent_id,
+	);
+	$child_pages = new WP_Query( $args );
+	return $child_pages;
+}
+
+/**
+ * アイキャッチ画像を利用できるようにする
+ * 管理画面にアイキャッチ画像を設定するためのUIが追加される
+ */
+add_theme_support( 'post-thumbnails' );
+
+/**
+ * トップページのメイン画像用のサイズ設定
+ * add_image_size() を定義（記述）したあとに画像をアップロードすると、そのサイズの画像が生成される。
+ */
+add_image_size( 'top', 1077, 622, true );
+
+/**
+ * 地域貢献活動一覧画像用のサイズ設定
+ */
+add_image_size( 'contribution', 557, 280, true );
+
+/**
+ * トップページの地域貢献活動にて使用している画像用のサイズ設定
+ */
+add_image_size( 'front-contribution', 255, 189, true );
+
+/**
+ * 企業情報・店舗情報一覧画像用のサイズ設定
+ */
+add_image_size( 'common', 465, 252, true );
+
+/**
+ * 各ページのメイン画像用のサイズ設定
+ */
+add_image_size( 'detail', 1100, 330, true );
+
+/**
+ * 検索一覧画像用のサイズ設定
+ */
+add_image_size( 'search', 168, 168, true );
+
+/**
+ * 各テンプレートごとのメイン画像を表示
+ *
+ * @return string メイン画像を表示するimgタグ
+ */
+function get_main_image() {
+	if ( is_page() ) {
+		return get_the_post_thumbnail( get_queried_object()->ID, 'detail' );
+	} elseif ( is_category( 'news' ) || is_singular( 'post' ) ) {
+		return '<img src="' . get_template_directory_uri() . '/assets/images/bg-page-news.jpg" />';
+	} else {
+		return '<img src="' . get_template_directory_uri() . '/assets/images/bg-page-dummy.jpg" />';
+	}
+}
+
+/**
+ * 特定の記事を抽出する関数
+ *
+ * @param string $post_type 投稿タイプ
+ * @param string|null $taxonomy 記事に紐づくタームが属する、タクソノミーのスラッグ
+ * @param string|null $term 記事に紐づくタームのスラッグ
+ * @param int $number 取得したい記事数 デフォルトは-1（全件取得）
+ *
+ * @return WP_Query
+ */
+function get_specific_post( string $post_type, string $taxonomy = null, string $term = null, int $number = -1 ): WP_Query {
+	$args = array(
+		'post_type'         => $post_type,
+		'posts_per_page'    => $number,
+		'tax_query'         => array( // 配列形式でタクソノミーに関する指定をして、柔軟に記事を取得できる
+			array(
+				'taxonomy'   => $taxonomy,
+				'field'      => 'slug',
+				'terms'      => $term,
+			),
+		),
+	);
+	$specific_posts = new WP_Query( $args );
+	return $specific_posts;
+}
