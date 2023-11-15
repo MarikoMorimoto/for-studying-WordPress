@@ -34,8 +34,13 @@ function get_main_title() {
  *
  * @return WP_Query
  */
-function get_child_pages( $number = -1 ) {
-	$parent_id = get_the_ID();
+function get_child_pages( $number = -1, $specified_id = null ) {
+	if ( isset( $specified_id ) ) :
+		$parent_id = $specified_id;
+	else :
+		$parent_id = get_the_ID();
+	endif;
+
 	$args = array(
 		'posts_per_page'    => $number,
 		'post_type'         => 'page',
