@@ -14,13 +14,7 @@
         </div>
         <div class="pager">
           <ul class="pagerList">
-            <?php
-            the_posts_pagination( array(
-                'mid_size'  => 2, // 現在のページの左右２ページずつを（存在すれば）ページネーションに表示
-                'prev_text' => '<',
-                'next_text' => '>',
-            ) );
-            ?>
+            <?php page_navi(); ?>
           </ul>
         </div>
       </div>

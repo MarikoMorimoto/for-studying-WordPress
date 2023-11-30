@@ -130,3 +130,16 @@ function get_specific_post( string $post_type, string $taxonomy = null, string $
 	$specific_posts = new WP_Query( $args );
 	return $specific_posts;
 }
+
+/**
+ * ページネーション
+ *
+ * @return void
+ */
+function page_navi() {
+	the_posts_pagination( array(
+		'mid_size'  => 2, // 現在のページの左右２ページずつを（存在すれば）ページネーションに表示
+		'prev_text' => '<',
+		'next_text' => '>',
+	) );
+}
