@@ -45,6 +45,13 @@
                     </ul>
                     <div class="pager">
                       <ul class="pagerList">
+                          <?php
+                          the_posts_pagination( array(
+                              'mid_size'  => 2,
+                              'prev_text' => '<',
+                              'next_text' => '>',
+                          ) );
+                          ?>
                       </ul>
                     </div>
                     <?php elseif ( ! get_search_query() ) : ?>
