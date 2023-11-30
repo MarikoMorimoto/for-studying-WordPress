@@ -12,6 +12,11 @@
           endif;
           ?>
         </div>
+        <div class="pager">
+          <ul class="pagerList">
+            <?php page_navi(); ?>
+          </ul>
+        </div>
       </div>
     </div>
   </div>

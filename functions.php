@@ -22,6 +22,8 @@ function get_main_title() {
 		return get_the_title();
 	} elseif( is_category() ) { // カテゴリーページか
 		return single_cat_title(); // 現在のカテゴリー名を出力
+	} elseif( is_search() ) {
+		return 'サイト内検索結果';
 	}
 
 	return '';
@@ -100,8 +102,10 @@ function get_main_image() {
 		return get_the_post_thumbnail( get_queried_object()->ID, 'detail' );
 	} elseif ( is_category( 'news' ) || is_singular( 'post' ) ) {
 		return '<img src="' . get_template_directory_uri() . '/assets/images/bg-page-news.jpg" />';
+	} elseif ( is_search() ) {
+		return '<img src="' . get_template_directory_uri() . '/assets/images/bg-page-search.jpg" />';
 	} else {
-		return '<img src="' . get_template_directory_uri() . '/assets/images/bg-page-dummy.jpg" />';
+		return '<img src="' . get_template_directory_uri() . '/assets/images/bg-page-dummy.png" />';
 	}
 }
 
@@ -129,4 +133,17 @@ function get_specific_post( string $post_type, string $taxonomy = null, string $
 	);
 	$specific_posts = new WP_Query( $args );
 	return $specific_posts;
+}
+
+/**
+ * ページネーション
+ *
+ * @return void
+ */
+function page_navi() {
+	the_posts_pagination( array(
+		'mid_size'  => 2, // 現在のページの左右２ページずつを（存在すれば）ページネーションに表示
+		'prev_text' => '<',
+		'next_text' => '>',
+	) );
 }
