@@ -15,15 +15,17 @@ register_nav_menus( array(
 
 // メイン画像上にテンプレートごとの文字列を表示
 function get_main_title() {
-	if ( is_singular( 'post') ) { // 個別の投稿か
+	if ( is_singular( 'post') ) { // is_singular() は、固定ページか投稿ページのときtrueを返す。引数に（カスタム）投稿タイプ名・固定ページを指定することができる。
 		$category_obj = get_the_category();
 		return $category_obj[0]->name;
-	} elseif ( is_page() ) {
+	} elseif ( is_page() ) { // 固定ページかどうか
 		return get_the_title();
-	} elseif( is_category() ) { // カテゴリーページか
+	} elseif ( is_category() ) { // カテゴリーページか
 		return single_cat_title(); // 現在のカテゴリー名を出力
-	} elseif( is_search() ) {
+	} elseif ( is_search() ) {
 		return 'サイト内検索結果';
+	} elseif ( is_404() ) {
+		return 'ページが見つかりません';
 	}
 
 	return '';
@@ -102,7 +104,7 @@ function get_main_image() {
 		return get_the_post_thumbnail( get_queried_object()->ID, 'detail' );
 	} elseif ( is_category( 'news' ) || is_singular( 'post' ) ) {
 		return '<img src="' . get_template_directory_uri() . '/assets/images/bg-page-news.jpg" />';
-	} elseif ( is_search() ) {
+	} elseif ( is_search() || is_404() ) {
 		return '<img src="' . get_template_directory_uri() . '/assets/images/bg-page-search.jpg" />';
 	} else {
 		return '<img src="' . get_template_directory_uri() . '/assets/images/bg-page-dummy.png" />';
