@@ -172,3 +172,14 @@ add_filter( 'excerpt_mblength', 'cms_excerpt_length' );
 
 // 抜粋機能を固定ページで使えるように設定（デフォルトでは固定ページで抜粋分を指定できない。自動出力される）
 add_post_type_support( 'page', 'excerpt' );
+
+/**
+ * 抜粋分を指定した長さにして返す
+ *
+ * @return string $value
+ */
+function get_flexible_excerpt( $number ) {
+	$value = get_the_excerpt();
+	$value = wp_trim_words( $value, $number, '...' );
+	return $value;
+}
