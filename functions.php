@@ -15,7 +15,7 @@ register_nav_menus( array(
 
 // メイン画像上にテンプレートごとの文字列を表示
 function get_main_title() {
-	if ( is_singular( 'post') ) { // is_singular() は、固定ページか投稿ページのときtrueを返す。引数に（カスタム）投稿タイプ名・固定ページを指定することができる。
+	if ( is_singular( 'post') ) { // is_singular() は、固定ページか投稿ページのときtrueを返す。引数に（カスタム）投稿タイプ名（投稿・固定どちらもの）を指定することができる。
 		$category_obj = get_the_category();
 		return $category_obj[0]->name;
 	} elseif ( is_page() ) { // 固定ページかどうか
@@ -149,3 +149,26 @@ function page_navi() {
 		'next_text' => '>',
 	) );
 }
+
+/**
+ * 抜粋分の最後につく文字列を変更
+ *
+ * @return string
+ */
+function cms_excerpt_more() {
+	return '...';
+}
+add_filter( 'excerpt_more', 'cms_excerpt_more' );
+
+/**
+ * 抜粋分の文字数を変更 ：WP Multibyte Patch標準は110文字
+ *
+ * @return int
+ */
+function cms_excerpt_length() {
+	return 80;
+}
+add_filter( 'excerpt_mblength', 'cms_excerpt_length' );
+
+// 抜粋機能を固定ページで使えるように設定（デフォルトでは固定ページで抜粋分を指定できない。自動出力される）
+add_post_type_support( 'page', 'excerpt' );
