@@ -15,15 +15,17 @@ register_nav_menus( array(
 
 // メイン画像上にテンプレートごとの文字列を表示
 function get_main_title() {
-	if ( is_singular( 'post') ) { // 個別の投稿か
+	if ( is_singular( 'post') ) { // is_singular() は、固定ページか投稿ページのときtrueを返す。引数に（カスタム）投稿タイプ名（投稿・固定どちらもの）を指定することができる。
 		$category_obj = get_the_category();
 		return $category_obj[0]->name;
-	} elseif ( is_page() ) {
+	} elseif ( is_page() ) { // 固定ページかどうか
 		return get_the_title();
-	} elseif( is_category() ) { // カテゴリーページか
+	} elseif ( is_category() ) { // カテゴリーページか
 		return single_cat_title(); // 現在のカテゴリー名を出力
-	} elseif( is_search() ) {
+	} elseif ( is_search() ) {
 		return 'サイト内検索結果';
+	} elseif ( is_404() ) {
+		return 'ページが見つかりません';
 	}
 
 	return '';
@@ -102,7 +104,7 @@ function get_main_image() {
 		return get_the_post_thumbnail( get_queried_object()->ID, 'detail' );
 	} elseif ( is_category( 'news' ) || is_singular( 'post' ) ) {
 		return '<img src="' . get_template_directory_uri() . '/assets/images/bg-page-news.jpg" />';
-	} elseif ( is_search() ) {
+	} elseif ( is_search() || is_404() ) {
 		return '<img src="' . get_template_directory_uri() . '/assets/images/bg-page-search.jpg" />';
 	} else {
 		return '<img src="' . get_template_directory_uri() . '/assets/images/bg-page-dummy.png" />';
@@ -147,3 +149,61 @@ function page_navi() {
 		'next_text' => '>',
 	) );
 }
+
+/**
+ * 抜粋分の最後につく文字列を変更
+ *
+ * @return string
+ */
+function cms_excerpt_more() {
+	return '...';
+}
+add_filter( 'excerpt_more', 'cms_excerpt_more' );
+
+/**
+ * 抜粋分の文字数を変更 ：WP Multibyte Patch標準は110文字
+ *
+ * @return int
+ */
+function cms_excerpt_length() {
+	return 80;
+}
+add_filter( 'excerpt_mblength', 'cms_excerpt_length' );
+
+// 抜粋機能を固定ページで使えるように設定（デフォルトでは固定ページで抜粋分を指定できない。自動出力される）
+add_post_type_support( 'page', 'excerpt' );
+
+/**
+ * 抜粋分を指定した長さにして返す
+ *
+ * @return string $value
+ */
+function get_flexible_excerpt( $number ) {
+	$value = get_the_excerpt();
+	$value = wp_trim_words( $value, $number, '...' );
+	return $value;
+}
+
+/**
+ * get_the_excerpt() で取得する文字列に改行タグを挿入
+ */
+function apply_excerpt_br( $value ) {
+	return nl2br( $value );
+}
+add_filter( 'get_the_excerpt', 'apply_excerpt_br' );
+
+/**
+ * ウィジェット機能を有効化
+ */
+function theme_widgets_init() {
+	register_sidebar( array(
+		'name'          => 'サイドバーウィジェットエリア',
+		'id'            => 'primary-widget-area',
+		'description'   => '固定ページのサイドバー',
+		'before_widget' => '<aside class="side-inner">',
+		'after_widget'  => '</aside>',
+		'before_title'  => '<h4 class="title">',
+		'after_title'   => '</h4>',
+	) );
+}
+add_action( 'widgets_init', 'theme_widgets_init' );
