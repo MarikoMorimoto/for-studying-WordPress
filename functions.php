@@ -20,12 +20,15 @@ function get_main_title() {
 		return $category_obj[0]->name;
 	} elseif ( is_page() ) { // 固定ページかどうか
 		return get_the_title();
-	} elseif ( is_category() ) { // カテゴリーページか
-		return single_cat_title(); // 現在のカテゴリー名を出力
+	} elseif ( is_category() || is_tax() ) { // カテゴリーページもしくはタクソノミーページか
+		return single_cat_title(); // 現在のカテゴリーもしくはタクソノミー名を出力
 	} elseif ( is_search() ) {
 		return 'サイト内検索結果';
 	} elseif ( is_404() ) {
 		return 'ページが見つかりません';
+	} elseif ( is_singular( 'daily_contribution' ) ) {
+		$term_obj = get_the_terms( get_queried_object()->ID, 'event' ); // get_the_terms で記事に紐づいているタームのオブジェクトの配列を取得する
+		return $term_obj[0]->name;
 	}
 
 	return '';
