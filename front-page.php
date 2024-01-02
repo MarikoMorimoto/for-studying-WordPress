@@ -54,7 +54,7 @@
 			<p class="section-lead"><?php echo get_the_excerpt(); ?></p>
 			<div class="articles">
 				<?php
-				$contribution_pages = get_child_pages( 3, get_the_ID() );
+				$contribution_pages = get_specific_post( 'daily_contribution', 'event', '', 3 );
 				if ( $contribution_pages->have_posts() ) :
 					while ( $contribution_pages->have_posts() ) : $contribution_pages->the_post();
 				?>

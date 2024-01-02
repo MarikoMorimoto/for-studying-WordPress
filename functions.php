@@ -125,6 +125,10 @@ function get_main_image() {
  * @return WP_Query
  */
 function get_specific_post( string $post_type, string $taxonomy = null, string $term = null, int $number = -1 ): WP_Query {
+	if ( ! $term ) { // 第三引数の $term を省略したときには 指定したタクソノミーに関する記事をすべて取得
+		$terms_obj = get_terms( $taxonomy );
+		$term = wp_list_pluck( $terms_obj, 'slug' ); // 第一引数にオブジェクトまたは連想配列の配列、第二引数にオブジェクトのプロパティ名または連想配列のキーを指定することで、配列内のオブジェクトまたは連想配列から特定の値だけを抽出する。
+	}
 	$args = array(
 		'post_type'         => $post_type,
 		'posts_per_page'    => $number,
