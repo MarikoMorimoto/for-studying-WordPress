@@ -106,6 +106,9 @@ function get_main_image() {
 	if ( is_page() || is_singular( 'daily_contribution' ) ) {
 		if ( function_exists( 'get_field' ) && get_field( 'main_image' ) ) { // get_field() はプラグインAdvance Custom Fields 固有の関数であり、プラグインを無効化すると関数が存在しなくなる。そのため存在チェックを挟む。
 			$attachment_id = get_field( 'main_image' ); // 管理画面にて、ACFの当該フィールドキーを「main_image」にし、戻り値に添付画像のIDを返すよう、設定している。
+			if ( is_front_page() ) {
+				return wp_get_attachment_image( $attachment_id, 'top' );
+			}
 			return wp_get_attachment_image( $attachment_id, 'detail' );
 		} else {
 			return get_the_post_thumbnail( get_queried_object()->ID, 'detail' );

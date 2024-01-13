@@ -46,7 +46,7 @@
     </header>
     <?php if ( is_front_page() ) : ?>
       <section class="section-contents" id="keyvisual">
-        <img src="<?php echo esc_url( get_template_directory_uri() ); ?>/assets/images/bg-section-keyvisual.jpg" alt="MAIN IMAGE" />
+        <?php echo get_main_image(); ?>
         <div class="wrapper">
           <h1 class="site-title">Connecting the future.</h1>
           <p class="site-caption"><?php echo get_the_excerpt(); ?></p>
