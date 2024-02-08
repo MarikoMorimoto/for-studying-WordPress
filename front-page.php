@@ -22,7 +22,7 @@
 						</div>
 						<div class="shop-body">
 							<p class="name"><?php the_title(); ?></p>
-							<p class="location"></p>
+							<p class="location"><?php if ( function_exists( 'the_field' ) ) { the_field( 'location' ); } ?></p>
 							<div class="buttonBox">
 								<button type="button" class="seeDetail">MORE</button>
 							</div>
