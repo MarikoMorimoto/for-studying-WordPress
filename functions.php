@@ -20,12 +20,15 @@ function get_main_title() {
 		return $category_obj[0]->name;
 	} elseif ( is_page() ) { // 固定ページかどうか
 		return get_the_title();
-	} elseif ( is_category() ) { // カテゴリーページか
-		return single_cat_title(); // 現在のカテゴリー名を出力
+	} elseif ( is_category() || is_tax() ) { // カテゴリーページもしくはタクソノミーページか
+		return single_cat_title(); // 現在のカテゴリーもしくはタクソノミー名を出力
 	} elseif ( is_search() ) {
 		return 'サイト内検索結果';
 	} elseif ( is_404() ) {
 		return 'ページが見つかりません';
+	} elseif ( is_singular( 'daily_contribution' ) ) {
+		$term_obj = get_the_terms( get_queried_object()->ID, 'event' ); // get_the_terms で記事に紐づいているタームのオブジェクトの配列を取得する
+		return $term_obj[0]->name;
 	}
 
 	return '';
@@ -100,12 +103,24 @@ add_image_size( 'search', 168, 168, true );
  * @return string メイン画像を表示するimgタグ
  */
 function get_main_image() {
-	if ( is_page() ) {
-		return get_the_post_thumbnail( get_queried_object()->ID, 'detail' );
+	if ( is_page() || is_singular( 'daily_contribution' ) ) {
+		if ( function_exists( 'get_field' ) && get_field( 'main_image' ) ) { // get_field() はプラグインAdvance Custom Fields 固有の関数であり、プラグインを無効化すると関数が存在しなくなる。そのため存在チェックを挟む。
+			$attachment_id = get_field( 'main_image' ); // 管理画面にて、ACFの当該フィールドキーを「main_image」にし、戻り値に添付画像のIDを返すよう、設定している。
+			if ( is_front_page() ) {
+				return wp_get_attachment_image( $attachment_id, 'top' );
+			}
+			return wp_get_attachment_image( $attachment_id, 'detail' );
+		} else {
+			return get_the_post_thumbnail( get_queried_object()->ID, 'detail' );
+		}
 	} elseif ( is_category( 'news' ) || is_singular( 'post' ) ) {
 		return '<img src="' . get_template_directory_uri() . '/assets/images/bg-page-news.jpg" />';
 	} elseif ( is_search() || is_404() ) {
 		return '<img src="' . get_template_directory_uri() . '/assets/images/bg-page-search.jpg" />';
+	} elseif ( is_tax( 'event' ) && function_exists( 'get_field' ) ) {
+		$term_obj = get_queried_object();
+		$image_id = get_field( 'event_image', $term_obj->taxonomy . '_' . $term_obj->term_id ); // タームのメタデータを取得する場合、get_field( 'フィールド名', 'カスタムタクソノミーのスラッグ_タームID' )という形式で引数を指定する必要がある
+		return wp_get_attachment_image( $image_id, 'detail' );
 	} else {
 		return '<img src="' . get_template_directory_uri() . '/assets/images/bg-page-dummy.png" />';
 	}
@@ -122,6 +137,10 @@ function get_main_image() {
  * @return WP_Query
  */
 function get_specific_post( string $post_type, string $taxonomy = null, string $term = null, int $number = -1 ): WP_Query {
+	if ( ! $term ) { // 第三引数の $term を省略したときには 指定したタクソノミーに関する記事をすべて取得
+		$terms_obj = get_terms( $taxonomy );
+		$term = wp_list_pluck( $terms_obj, 'slug' ); // 第一引数にオブジェクトまたは連想配列の配列、第二引数にオブジェクトのプロパティ名または連想配列のキーを指定することで、配列内のオブジェクトまたは連想配列から特定の値だけを抽出する。
+	}
 	$args = array(
 		'post_type'         => $post_type,
 		'posts_per_page'    => $number,
@@ -207,3 +226,34 @@ function theme_widgets_init() {
 	) );
 }
 add_action( 'widgets_init', 'theme_widgets_init' );
+
+/**
+ * メイン画像上にテンプレートごとの英語タイトルを表示
+ *
+ * @return string|null
+ */
+function get_main_en_title() {
+	if ( ! function_exists( 'get_field') ) {
+		return null;
+	}
+	if ( is_category() ) {
+		$term_obj = get_queried_object();
+		$english_title = get_field( 'english_title', $term_obj->taxonomy . '_' . $term_obj->term_id );
+		return $english_title;
+	} elseif ( is_singular( 'post' ) ) {
+		$term_obj = get_the_category();
+		$english_title = get_field( 'english_title', $term_obj[0]->taxonomy . '_' . $term_obj[0]->term_id );
+		return $english_title;
+	} elseif ( is_page() || is_singular( 'daily_contribution' ) ) {
+		return get_field( 'english_title' );
+	} elseif ( is_search() ) {
+		return 'Search Result';
+	} elseif ( is_404() ) {
+		return '404 Not Found';
+	} elseif ( is_tax() ) {
+		$term_obj = get_queried_object();
+		$english_title = get_field( 'english_title', $term_obj->taxonomy . '_' . $term_obj->term_id );
+		return $english_title;
+	}
+	return null;
+}

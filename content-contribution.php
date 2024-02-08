@@ -1,12 +1,19 @@
 <article class="article-card">
-	<a class="card-link" href="<?php the_permalink(); ?>">
+	<a class="card-link" href="<?php echo get_term_link( $term ); // このファイルは include を使って呼び出されルことを前提として作成している。そのため呼び出し元で定義された変数 $term を参照する ?>">
 		<div class="image">
-			<?php the_post_thumbnail( 'contribution' ); ?>
+            <?php
+            if ( function_exists( 'get_field') ) :
+                $image_id = get_field( 'event_image', $term->taxonomy . '_' . $term->term_id );
+                echo wp_get_attachment_image( $image_id, 'contribution' );
+            else :
+                ?>
+                <img src="<?php echo get_template_directory_uri(); ?>/assets/images/bg-page-dummy.png">
+            <?php endif; ?>
 		</div>
 		<div class="body">
 			<time><?php the_time( 'Y.m.d' ); ?></time>
-			<p class="title"><?php the_title(); ?></p>
-			<p class="excerpt"><?php echo get_the_excerpt(); ?></p>
+			<p class="title"><?php echo $term->name; ?></p>
+			<p class="excerpt"><?php echo $term->description; ?></p>
 			<div class="buttonBox">
 				<button type="button" class="seeDetail">More</button>
 			</div>

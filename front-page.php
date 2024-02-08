@@ -22,7 +22,7 @@
 						</div>
 						<div class="shop-body">
 							<p class="name"><?php the_title(); ?></p>
-							<p class="location"></p>
+							<p class="location"><?php if ( function_exists( 'the_field' ) ) { the_field( 'location' ); } ?></p>
 							<div class="buttonBox">
 								<button type="button" class="seeDetail">MORE</button>
 							</div>
@@ -49,12 +49,12 @@
 			setup_postdata( $post );
 			$contribution_title = get_the_title();
 			?>
-			<span class="section-title-en">Regional Contribution</span>
+			<span class="section-title-en"><?php if ( function_exists( 'the_field' ) ) { the_field( 'english_title' ); } ?></span>
 			<h2 class="section-title"><?php the_title(); ?></h2>
 			<p class="section-lead"><?php echo get_the_excerpt(); ?></p>
 			<div class="articles">
 				<?php
-				$contribution_pages = get_child_pages( 3, get_the_ID() );
+				$contribution_pages = get_specific_post( 'daily_contribution', 'event', '', 3 );
 				if ( $contribution_pages->have_posts() ) :
 					while ( $contribution_pages->have_posts() ) : $contribution_pages->the_post();
 				?>
@@ -90,7 +90,13 @@
 	<section class="section-contents" id="news">
 		<div class="wrapper">
 			<?php $term_obj = get_term_by( 'slug', 'news', 'category' ); // タームのslug,ID,nameなどを指定することでそのタームのオブジェクトを取得する ?>
-			<span class="section-title-en">News Release</span>
+			<span class="section-title-en">
+                <?php
+                if ( function_exists( 'the_field' ) ) :
+                    the_field( 'english_title', $term_obj->taxonomy . '_' . $term_obj->term_id );
+                endif;
+                ?>
+            </span>
 			<h2 class="section-title"><?php echo $term_obj->name; ?></h2>
 			<p class="section-lead"><?php echo $term_obj->description; ?></p>
 			<ul class="news">
@@ -125,7 +131,7 @@
 			$post = get_page_by_path( 'company' );
 			setup_postdata( $post );
 			?>
-			<span class="section-title-en">Corporate Information</span>
+			<span class="section-title-en"><?php if ( function_exists( 'the_field' ) ) { the_field( 'english_title' ); } ?></span>
 			<h2 class="section-title"><?php the_title(); ?></h2>
 			<p class="section-lead"><?php echo get_the_excerpt(); ?></p>
 			<div class="section-buttons">

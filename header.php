@@ -3,8 +3,6 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <meta name="keywords" content="共通キーワード" />
-  <meta name="description" content="<?php bloginfo( 'description' ); ?>" />
   <title><?php echo esc_html( wp_get_document_title() ); ?></title>
   <link rel="shortcut icon" href="<?php echo esc_url( get_template_directory_uri() ); ?>/assets/images/common/favicon.ico" />
   <link href="https://fonts.googleapis.com/earlyaccess/notosansjapanese.css" rel="stylesheet" />
@@ -48,7 +46,7 @@
     </header>
     <?php if ( is_front_page() ) : ?>
       <section class="section-contents" id="keyvisual">
-        <img src="<?php echo esc_url( get_template_directory_uri() ); ?>/assets/images/bg-section-keyvisual.jpg" alt="MAIN IMAGE" />
+        <?php echo get_main_image(); ?>
         <div class="wrapper">
           <h1 class="site-title">Connecting the future.</h1>
           <p class="site-caption"><?php echo get_the_excerpt(); ?></p>
@@ -62,7 +60,7 @@
               <div class="page-head">
                 <?php echo get_main_image(); ?>
                 <div class="wrapper">
-                  <span class="page-title-en"></span>
+                  <span class="page-title-en"><?php echo get_main_en_title() ?></span>
                   <h2 class="page-title"><?php echo get_main_title(); ?></h2>
                 </div>
               </div>
