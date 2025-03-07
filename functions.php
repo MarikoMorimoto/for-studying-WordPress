@@ -257,3 +257,33 @@ function get_main_en_title() {
 	}
 	return null;
 }
+
+/**
+ * FizzBuzz 数字が3で割り切れる場合はFizzを、5で割り切れる場合はBuzzを、3でも5でも割り切れる場合はFizzBuzzを出力する。
+ * 単体テストのテスト用の関数。
+ *
+ * @param $number int|string
+ * @return string
+ */
+function fizzbuzz( $number ) {
+	// 値が数字または数値形式の文字列かどうか
+	if ( ! is_numeric( $number ) ) {
+		return "数値を入力してください。";
+	}
+	// 値を整数に変換する。小数点以下がある場合も整数に変換されてしまうが、今回の処理では許容する。
+	$number = intval( $number );
+
+	if ( 0 === $number ) {
+		return "Not FizzBuzz...";
+	}
+
+	if ( $number % 15 === 0 ) {
+		return "FizzBuzz!";
+	} elseif ( $number % 5 === 0 ) {
+		return "Buzz";
+	} elseif ( $number % 3 === 0 ) {
+		return "Fizz";
+	}
+
+	return "Not FizzBuzz...";
+}
