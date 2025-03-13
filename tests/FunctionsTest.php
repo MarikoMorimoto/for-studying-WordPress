@@ -12,7 +12,7 @@ class FunctionsTest extends TestCase {
 	public function testFizzbuzz() {
 		$this->assertEquals( 'Not FizzBuzz...', fizzbuzz(1 ) );
 		$this->assertEquals( 'Not FizzBuzz...', fizzbuzz('0' ) );
-		$this->assertEquals( 'Not FizzBuzz...', fizzbuzz('1234abcd' ) );
+		$this->assertEquals( '数値を入力してください。', fizzbuzz('1234abcd' ) );
 		$this->assertEquals( 'Fizz', fizzbuzz( 3 ) );
 		$this->assertEquals( 'Fizz', fizzbuzz( '6' ) );
 		$this->assertEquals( 'Buzz', fizzbuzz( '5' ) );
